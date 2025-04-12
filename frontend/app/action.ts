@@ -1,4 +1,3 @@
-// lib/db.ts
 import { db } from "@/utils/FirebaseConfig";
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { hash } from "bcryptjs";
