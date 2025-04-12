@@ -26,7 +26,6 @@ export default function Home() {
 
       <Hero />
 
-      {/* Features Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="bg-[#1a1a1a]/50 rounded-2xl p-6 backdrop-blur-sm border border-purple-900/20 hover:border-purple-500/50 transition-colors">
@@ -64,7 +63,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Stats Section */}
       <div className="relative py-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

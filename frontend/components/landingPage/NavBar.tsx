@@ -1,6 +1,26 @@
 import { Video } from "lucide-react";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export const NavBar = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
+  const handleGoogleSignin = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await signIn("google", {
+        callbackUrl: `/dashboard`,
+      });
+      //   toast.success("Successfully logged in!");
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      setError("Failed to sign in with Google");
+      //   toast.error("Failed to sign in with Google");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <nav className="fixed w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,7 +64,12 @@ export const NavBar = () => {
             </a>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="px-4 py-2 text-sm text-white/80 hover:text-white transition-colors">
+            <button
+              onClick={() => {
+                handleGoogleSignin();
+              }}
+              className="px-4 py-2 text-sm text-white/80 hover:text-white transition-colors"
+            >
               Sign In
             </button>
             <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full hover:opacity-90 transition-opacity">
