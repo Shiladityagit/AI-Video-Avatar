@@ -5,18 +5,13 @@ import { NavBar } from "@/components/landingPage/NavBar";
 import {
   Video,
   Camera,
-  Play,
   Star,
   Wand2,
   Github,
   Twitter,
   Linkedin,
-  Mail,
   ArrowRight,
-  CheckCircle2,
-  Users,
   Sparkles,
-  MessageSquare,
 } from "lucide-react";
 
 export default function Home() {

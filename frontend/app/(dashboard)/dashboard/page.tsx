@@ -9,7 +9,6 @@ import {
   Play,
   Check,
   Sparkles,
-  Loader2,
   ArrowRight,
   X,
   RefreshCw,
@@ -26,10 +25,10 @@ function Dashboard() {
   const [avatarGenerated, setAvatarGenerated] = useState(false);
   const { data: session, status } = useSession();
 
-  const handleImageUpload = (e: any) => {
-    // Mock image upload
-    // setUploadedImages([...uploadedImages, "image-" + (uploadedImages.length + 1)]);
-  };
+  // const handleImageUpload = (e: any) => {
+  //   // Mock image upload
+  //   // setUploadedImages([...uploadedImages, "image-" + (uploadedImages.length + 1)]);
+  // };
 
   const startRecording = () => {
     setIsRecording(true);
