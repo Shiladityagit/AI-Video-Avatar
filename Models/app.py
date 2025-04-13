@@ -6,7 +6,8 @@ import openai
 import os
 import torch
 import numpy as np
-import sounddevice as sd
+import pyaudio
+#import sounddevice as sd
 from scipy.io.wavfile import write
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from news_video import VideoGenerator
