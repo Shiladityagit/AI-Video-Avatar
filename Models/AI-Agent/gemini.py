@@ -27,8 +27,6 @@ browser = Browser(
 
 async def run_search():
 	agent = Agent(
-		#task='Go to https://krushisaathi.vercel.app/landing, then login as Farmer with Username: 1234567890 and Paassward: 123456, Agree the terms and conditions and click Login, then Click ok to the drop down box. Then go to Soil Analysis.',
-		#task='Go to https://krushisaathi-891779892886.us-central1.run.app/landing, then click on Get Started, then on Farm Solutions, then login as Farmer with Username: 1234567890 and Paassward: 123456, Agree the terms and conditions and click Login, then Click ok to the drop down box. Then go to Soil Analysis.',
 		task='',
 		llm=llm,
 		max_actions_per_step=4,
