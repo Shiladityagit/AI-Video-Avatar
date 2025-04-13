@@ -94,7 +94,7 @@ export const NavBar = () => {
             </button>
             <button
               onClick={() => {
-                HandleCreateAvatar();
+                handleGoogleSignin();
               }}
               className="px-4 flex gap-2 py-2 text-sm bg-gradient-to-r from-orange-600 to-amber-600 rounded-full hover:opacity-90 transition-opacity"
             >

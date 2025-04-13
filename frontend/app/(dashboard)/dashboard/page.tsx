@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Video,
   Camera,
@@ -14,8 +14,10 @@ import {
   RefreshCw,
   Download,
   Share2,
+  Pause,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
+
 function Dashboard() {
   const [activeStep, setActiveStep] = useState(1);
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -25,19 +27,99 @@ function Dashboard() {
   const [avatarGenerated, setAvatarGenerated] = useState(false);
   const { data: session, status } = useSession();
 
-  // const handleImageUpload = (e: any) => {
-  //   // Mock image upload
-  //   // setUploadedImages([...uploadedImages, "image-" + (uploadedImages.length + 1)]);
-  // };
+  // Audio recording states
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [audioURL, setAudioURL] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [recordingError, setRecordingError] = useState(null);
 
-  const startRecording = () => {
-    setIsRecording(true);
-    // Mock recording for 3 seconds
-    setTimeout(() => {
+  // Refs
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const audioPlayerRef = useRef(null);
+
+  const handleImageUpload = (e) => {
+    // Mock image upload functionality
+    const newImages = [...uploadedImages];
+    for (let i = 0; i < e.target.files.length; i++) {
+      newImages.push("image-" + (uploadedImages.length + i + 1));
+    }
+    setUploadedImages(newImages);
+  };
+
+  const startRecording = async () => {
+    setRecordingError(null);
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      audioChunksRef.current = [];
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/webm",
+        });
+        setAudioBlob(audioBlob);
+
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setAudioURL(audioUrl);
+
+        // Stop all tracks on the stream to release the microphone
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+      setRecordingError(
+        "Could not access microphone. Please check your permissions and try again."
+      );
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
       setIsRecording(false);
       setRecordingComplete(true);
-    }, 3000);
+    }
   };
+
+  const playRecording = () => {
+    if (audioPlayerRef.current && audioURL) {
+      if (isPlaying) {
+        audioPlayerRef.current.pause();
+      } else {
+        audioPlayerRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Handle audio player ended event
+  useEffect(() => {
+    const handleEnded = () => {
+      setIsPlaying(false);
+    };
+
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.addEventListener("ended", handleEnded);
+    }
+
+    return () => {
+      if (audioPlayerRef.current) {
+        audioPlayerRef.current.removeEventListener("ended", handleEnded);
+      }
+    };
+  }, [audioURL]);
 
   const generateAvatar = () => {
     setIsGenerating(true);
@@ -54,6 +136,19 @@ function Dashboard() {
     setRecordingComplete(false);
     setAvatarGenerated(false);
     setActiveStep(1);
+    setAudioBlob(null);
+    setAudioURL(null);
+
+    // Clear the URL object to prevent memory leaks
+    if (audioURL) {
+      URL.revokeObjectURL(audioURL);
+    }
+  };
+
+  const handleCreateAvatar = () => {
+    // Implement avatar creation logic here
+    setActiveStep(1);
+    // You can add additional functionality as needed
   };
 
   return (
@@ -162,6 +257,11 @@ function Dashboard() {
           </div>
         </div>
 
+        {/* Hidden audio player */}
+        {audioURL && (
+          <audio ref={audioPlayerRef} src={audioURL} className="hidden" />
+        )}
+
         {/* Step Containers */}
         <div className="space-y-6">
           {/* Step 1: Upload Photos */}
@@ -192,7 +292,7 @@ function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   {/* Upload Box */}
                   <div
-                    // onClick={() => document.getElementById('fileInput').click()}
+                    onClick={() => document.getElementById("fileInput").click()}
                     className="h-40 border-2 border-dashed border-orange-800/50 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-500 transition-colors"
                   >
                     <Upload className="w-8 h-8 text-orange-400 mb-2" />
@@ -205,6 +305,7 @@ function Dashboard() {
                       className="hidden"
                       onChange={handleImageUpload}
                       multiple
+                      accept="image/*"
                     />
                   </div>
 
@@ -298,14 +399,23 @@ function Dashboard() {
                         "The quick brown fox jumps over the lazy dog. Voice
                         technology has improved significantly in recent years."
                       </p>
+
+                      {recordingError && (
+                        <div className="mt-4 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg">
+                          {recordingError}
+                        </div>
+                      )}
                     </div>
                   ) : isRecording ? (
                     <div className="text-center">
-                      <div className="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mb-4 mx-auto animate-pulse">
-                        <Mic className="w-8 h-8" />
+                      <div
+                        className="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mb-4 mx-auto cursor-pointer hover:bg-red-600 transition-colors animate-pulse"
+                        onClick={stopRecording}
+                      >
+                        <Pause className="w-8 h-8" />
                       </div>
                       <p className="text-orange-200/70 mb-2">
-                        Recording in progress...
+                        Recording in progress... Click to stop
                       </p>
                       <div className="h-10 bg-[#2b1403] rounded-full overflow-hidden">
                         <div className="h-full bg-gradient-to-r from-orange-500 to-red-500 w-1/2 animate-pulse"></div>
@@ -320,9 +430,21 @@ function Dashboard() {
                         Recording complete!
                       </p>
                       <div className="flex gap-4 mt-4">
-                        <button className="px-4 py-2 bg-[#3b1d06] rounded-full text-white text-sm hover:bg-[#4b2507] transition-colors flex items-center gap-2">
-                          <Play className="w-4 h-4" />
-                          Play
+                        <button
+                          onClick={playRecording}
+                          className="px-4 py-2 bg-[#3b1d06] rounded-full text-white text-sm hover:bg-[#4b2507] transition-colors flex items-center gap-2"
+                        >
+                          {isPlaying ? (
+                            <>
+                              <Pause className="w-4 h-4" />
+                              Pause
+                            </>
+                          ) : (
+                            <>
+                              <Play className="w-4 h-4" />
+                              Play
+                            </>
+                          )}
                         </button>
                         <button
                           onClick={startRecording}
@@ -478,11 +600,11 @@ function Dashboard() {
             )}
           </div>
           <div className="w-full flex mt-5 flex-col gap-5 justify-center font-bold items-center">
-            <div className="text-white/[0.4]   text-[24px]">or</div>
+            <div className="text-white/[0.4] text-[24px]">or</div>
             <button
-              // onClick={() => {
-              //   HandleCreateAvatar();
-              // }}
+              onClick={() => {
+                handleCreateAvatar();
+              }}
               className="px-8 py-4 bg-gradient-to-r from-orange-600 to-amber-600 rounded-full text-white font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
             >
               <Camera className="w-5 h-5" />
