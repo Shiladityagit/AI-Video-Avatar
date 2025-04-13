@@ -1,5 +1,6 @@
 "use client";
 
+import { Hero } from "@/components/landingPage/Hero";
 import { NavBar } from "@/components/landingPage/NavBar";
 import {
   Video,
@@ -21,11 +22,9 @@ import {
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#1a0c02] text-white overflow-hidden">
-  
-
       <NavBar />
 
-      
+      <Hero />
       {/* Features Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
