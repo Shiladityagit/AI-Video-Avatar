@@ -13,4 +13,5 @@ numpy
 sounddevice
 python-multipart
 cffi
+portaudio19-dev
 
