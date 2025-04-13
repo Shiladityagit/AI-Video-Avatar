@@ -134,7 +134,7 @@ export default function Home() {
               <div className="flex items-center mb-6">
                 <Video className="h-8 w-8 text-orange-400" />
                 <span className="ml-2 text-xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-                  AvatarAI
+                  Chasers
                 </span>
               </div>
               <p className="text-orange-200/70 mb-6">

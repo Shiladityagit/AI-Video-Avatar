@@ -1,4 +1,4 @@
-import { Camera, Loader, Play } from "lucide-react";
+import { Camera, Loader, Play, BookOpen } from "lucide-react";
 // import { HandleCreateAvatar } from "./CreateAvatarButton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,11 @@ export const Hero = () => {
       setLoading(false);
     }
   };
+
+  const HandleAITutor = () => {
+    router.push("/ai-tutor");
+  };
+
   return (
     <div className="relative pt-32 pb-20 sm:pt-40 sm:pb-24">
       <div className="absolute inset-0 -z-10">
@@ -39,7 +44,7 @@ export const Hero = () => {
             Transform your photos and voice into lifelike video avatars using
             cutting-edge AI technology
           </p>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
               onClick={() => {
                 HandleCreateAvatar();
@@ -49,6 +54,13 @@ export const Hero = () => {
               <Camera className="w-5 h-5" />
               CREATE YOUR AVATAR
               {loading && <Loader className="animate-spin w-5 h-5" />}
+            </button>
+            <button
+              onClick={HandleAITutor}
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-white font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+            >
+              <BookOpen className="w-5 h-5" />
+              AI TUTOR
             </button>
             <button className="px-8 py-4 bg-[#3b1d06] rounded-full text-white font-medium hover:bg-[#4b2507] transition-colors flex items-center gap-2">
               <Play className="w-5 h-5" />
