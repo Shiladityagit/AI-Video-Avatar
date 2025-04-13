@@ -6,7 +6,8 @@ import openai
 import os
 import torch
 import numpy as np
-import sounddevice as sd
+import pyaudio
+#import sounddevice as sd
 from scipy.io.wavfile import write
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from news_video import VideoGenerator
@@ -56,11 +57,38 @@ def load_whisper():
 pipe = load_whisper()
 
 # === AUDIO RECORDING ===
+#def record_audio(duration=10, sample_rate=16000):
+    #st.info("Recording... Speak now!")
+    #audio = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='float32')
+    #sd.wait()
+    #st.success("Recording complete!")
+    #return np.squeeze(audio), sample_rate
 def record_audio(duration=10, sample_rate=16000):
     st.info("Recording... Speak now!")
-    audio = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='float32')
-    sd.wait()
+
+    chunk = 1024
+    format = pyaudio.paInt16
+    channels = 1
+
+    p = pyaudio.PyAudio()
+    stream = p.open(format=format,
+                    channels=channels,
+                    rate=sample_rate,
+                    input=True,
+                    frames_per_buffer=chunk)
+
+    frames = []
+    for _ in range(0, int(sample_rate / chunk * duration)):
+        data = stream.read(chunk)
+        frames.append(data)
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
     st.success("Recording complete!")
+
+    audio = np.frombuffer(b''.join(frames), dtype=np.int16).astype(np.float32) / 32768.0
     return np.squeeze(audio), sample_rate
 
 # === UI ===
