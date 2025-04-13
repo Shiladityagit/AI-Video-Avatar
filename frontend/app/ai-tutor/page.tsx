@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -97,20 +98,36 @@ export default function AITutor() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-[#9b87f5]/20 via-[#7e69ab]/10 to-transparent rounded-full blur-3xl -z-10"></div>
 
         <div className="z-10 text-center mb-8">
-          <h1 className="text-4xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-[#9b87f5] to-[#7e69ab] bg-clip-text text-transparent">
+          <motion.h1
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="text-4xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-[#9b87f5] to-[#7e69ab] bg-clip-text text-transparent"
+          >
             AI-Powered Learning Tutor
-          </h1>
-          <p className="text-xl text-gray-300 mb-4">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-xl text-gray-300 mb-4"
+          >
             Transform any content into interactive video tutorials with our
             advanced AI
-          </p>
-          <Link
-            href="/"
-            className="inline-flex items-center text-[#9b87f5] hover:text-[#7e69ab] transition-colors"
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center text-[#9b87f5] hover:text-[#7e69ab] transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Link>
+          </motion.div>
         </div>
       </div>
 
