@@ -12,3 +12,5 @@ soundfile
 numpy
 sounddevice
 python-multipart
+cffi
+
