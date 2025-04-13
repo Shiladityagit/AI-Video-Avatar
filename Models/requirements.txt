@@ -13,3 +13,4 @@ numpy>=1.26.4
 sounddevice>=0.4.6
 python-multipart>=0.0.9
 cffi>=1.16.0
+pyaudio
