@@ -3,4 +3,11 @@ openai
 langchain
 python-dotenv
 streamlit
-bs4
+transformers
+datasets
+fastapi
+uvicorn
+torch
+soundfile
+numpy
+python-multipart
