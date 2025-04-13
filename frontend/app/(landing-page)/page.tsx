@@ -134,7 +134,7 @@ export default function Home() {
               <div className="flex items-center mb-6">
                 <Video className="h-8 w-8 text-orange-400" />
                 <span className="ml-2 text-xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-                  Chasers
+                  WiWiAvatars
                 </span>
               </div>
               <p className="text-orange-200/70 mb-6">
@@ -256,7 +256,7 @@ export default function Home() {
           <div className="border-t border-orange-800/30 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-orange-200/70 text-sm">
-                © 2025 AvatarAI. All rights reserved.
+                © 2025 Chasers. All rights reserved.
               </p>
               <div className="flex space-x-6 mt-4 md:mt-0">
                 <a
