@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Video,
   Link as LinkIcon,
@@ -15,7 +15,7 @@ import {
   Play,
   Upload,
   Sparkles,
-  ArrowRight,
+  // ArrowRight,
   Check,
   Loader,
   PlusCircle,
@@ -52,7 +52,7 @@ export default function AITutor() {
     },
   ]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (!inputUrl.trim()) return;
 
@@ -75,7 +75,7 @@ export default function AITutor() {
     }, 2000);
   };
 
-  const updateStepCompletion = (stepId, completed) => {
+  const updateStepCompletion = (stepId: number, completed: boolean) => {
     setFlowSteps((prevSteps) =>
       prevSteps.map((step) =>
         step.id === stepId ? { ...step, completed } : step

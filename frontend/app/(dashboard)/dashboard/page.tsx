@@ -1,29 +1,31 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosProgressEvent } from "axios";
 import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from "uuid";
 import {
-  Video,
+  // Video,
   Camera,
   Mic,
   Upload,
-  Play,
-  Check,
+  // Play,
+  // Check,
   Sparkles,
   ArrowRight,
   X,
   RefreshCw,
   Download,
   Share2,
-  Menu,
+  // Menu,
   User,
   Settings,
   LogOut,
   Info,
   AlertCircle,
+  Loader2,
 } from "lucide-react";
+import Image from "next/image";
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
@@ -88,7 +90,7 @@ function Dashboard() {
           `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
           formData,
           {
-            onUploadProgress: (progressEvent: any) => {
+            onUploadProgress: (progressEvent: AxiosProgressEvent) => {
               const percent = Math.round(
                 (progressEvent.loaded * 100) / (progressEvent.total || 1)
               );
@@ -120,7 +122,6 @@ function Dashboard() {
     }
   };
 
-  // Delete image
   const deleteImage = async (id: string, publicId: string) => {
     try {
       await axios.post("/api/delete-image", { publicId });
@@ -251,7 +252,6 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#120801] to-[#1a0c02] text-white">
-      {/* Header */}
       <header className="fixed w-full top-0 z-50 bg-[#2b1403]/90 backdrop-blur-md border-b border-orange-800/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -300,7 +300,6 @@ function Dashboard() {
       </header>
 
       <div className="pt-24 pb-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Progress Steps */}
         <div className="mb-12">
           <div className="flex items-center justify-between max-w-2xl mx-auto">
             {[1, 2, 3].map((step) => (
@@ -341,7 +340,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="mb-6 p-4 bg-red-900/20 border border-red-500/40 rounded-lg flex items-start">
             <AlertCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5 flex-shrink-0" />
@@ -349,7 +347,6 @@ function Dashboard() {
           </div>
         )}
 
-        {/* Step Containers */}
         <div className="space-y-8">
           {/* Step 1: Upload Photos */}
           <div
@@ -431,8 +428,9 @@ function Dashboard() {
                   key={img.id}
                   className="h-48 bg-[#3b1d06] rounded-xl relative overflow-hidden group shadow-md"
                 >
-                  <img
+                  <Image
                     src={img.url}
+                    layout="fill"
                     alt="Uploaded"
                     className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
@@ -602,7 +600,7 @@ function Dashboard() {
                     <Info className="w-5 h-5 text-orange-400 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-orange-300 text-sm">
-                        You've uploaded{" "}
+                        You&apos;ve uploaded{" "}
                         <span className="font-medium">
                           {uploadedImages.length} photos
                         </span>{" "}
@@ -645,6 +643,20 @@ function Dashboard() {
                 )}
               </div>
             )}
+          </div>
+          <div className="flex flex-col justify-center items-center gap-5 mt-4">
+            {" "}
+            <div>or</div>
+            <button
+              onClick={() => {}}
+              // disabled={uploadedImages.length < 3 || !recording}
+              className={`w-[50%] cursor-pointer hover:bg-amber-700/[0.2] hover:scale-105 py-6 bg-gradient-to-r from-orange-500 to-amber-600 rounded-xl text-white font-medium text-lg shadow-lg shadow-orange-900/20`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Sparkles className="w-6 h-6" />
+                Generate
+              </div>
+            </button>
           </div>
         </div>
       </div>
