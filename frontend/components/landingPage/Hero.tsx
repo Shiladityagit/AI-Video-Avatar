@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Camera, Loader, Play, BookOpen } from "lucide-react";
+import { Camera, Loader, Play, BookOpen, AlertCircle } from "lucide-react";
 import { useSession, signIn } from "next-auth/react";
 import { useState } from "react";
 
@@ -12,7 +12,7 @@ export const Hero = () => {
 
   const handleAITutor = async () => {
     setLoading(true);
-    setError(""); // Clear previous errors
+    setError(""); 
     try {
       await signIn("google", {
         callbackUrl: "/ai-tutor",
@@ -27,7 +27,7 @@ export const Hero = () => {
 
   const handleCreateAvatar = async () => {
     setLoading(true);
-    setError(""); // Clear previous errors
+    setError(""); 
     try {
       await signIn("google", {
         callbackUrl: "/dashboard",
@@ -40,7 +40,6 @@ export const Hero = () => {
     }
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: {},
     visible: {
@@ -136,6 +135,13 @@ export const Hero = () => {
             </motion.button>
           </motion.div>
         </motion.div>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-900/20 border border-red-500/40 rounded-lg flex items-start">
+            <AlertCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5 flex-shrink-0" />
+            <p className="text-red-300">{error}</p>
+          </div>
+        )}
       </div>
     </div>
   );

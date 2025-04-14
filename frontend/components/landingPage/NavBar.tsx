@@ -1,4 +1,4 @@
-import { Loader, Video } from "lucide-react";
+import { AlertCircle, Loader, Video } from "lucide-react";
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export const NavBar = () => {
     setAvatarLoading(true);
     try {
       if (session && status === "authenticated") {
-        router.push("/dashboard");
+        router.push("/ai-tutor");
       } else {
         router.push("/login");
       }
@@ -30,7 +30,7 @@ export const NavBar = () => {
     setError("");
     try {
       await signIn("google", {
-        callbackUrl: `/dashboard`,
+        callbackUrl: `/ai-tutor`,
       });
       //   toast.success("Successfully logged in!");
     } catch (error) {
@@ -94,7 +94,7 @@ export const NavBar = () => {
             </button>
             <button
               onClick={() => {
-                handleGoogleSignin();
+                HandleCreateAvatar();
               }}
               className="px-4 flex gap-2 py-2 text-sm bg-gradient-to-r from-orange-600 to-amber-600 rounded-full hover:opacity-90 transition-opacity"
             >
@@ -102,6 +102,13 @@ export const NavBar = () => {
               {avatarLoading && <Loader className="animate-spin w-5 h-5" />}
             </button>
           </div>
+         
+        {error && (
+          <div className="mb-6 p-4 bg-red-900/20 border border-red-500/40 rounded-lg flex items-start">
+            <AlertCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5 flex-shrink-0" />
+            <p className="text-red-300">{error}</p>
+          </div>
+        )}
         </div>
       </div>
     </nav>
